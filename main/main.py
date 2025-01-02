@@ -68,7 +68,7 @@ class appTest():
 
 
     def on_close(self):
-        self.file.close()
+        self.file.flush()
         try:
             self.top.destroy()
         except:
@@ -123,6 +123,9 @@ class appTest():
             self.TpLbl.config(text='Click!')
         else:
             pass
+
+    def play(self):
+        pass
 
 test = appTest()
 test.baseBuild()
