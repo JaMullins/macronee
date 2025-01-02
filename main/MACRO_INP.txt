@@ -1,0 +1,26 @@
+'g'
+'g'
+'h'
+'g'
+'f'
+'f'
+Key.f1
+'f'
+'f'
+'f'
+Button.left (880, 541)
+Button.left (880, 541)
+Button.left (1036, 1020)
+Button.left (1036, 1020)
+Button.left (328, 558)
+Button.left (328, 558)
+Button.left (422, 590)
+Button.left (422, 590)
+Button.left (475, 543)
+Button.left (475, 543)
+Button.left (604, 475)
+Button.left (604, 475)
+Button.left (674, 382)
+Button.left (674, 382)
+Button.left (671, 74)
+Button.left (671, 74)
