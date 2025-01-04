@@ -1,17 +1,19 @@
 import tkinter as tk
+from math import floor
+
 import pynput as pn
 from pynput import keyboard, mouse
 
 class appTest():
     def __init__(self):
         self.file = open('MACRO_INP.txt','w')
-        self.mouse_x_y = (0,0)
+        self.mouse_x_y = (None,None)
         self.tk = tk.Tk()
         self.tk.config(bg='black')
         self.tk.geometry("500x500")
         self.tk.title('MACROni')
         self.b1image = tk.PhotoImage(file="record_button_2.png")
-        self.b2image = tk.PhotoImage(file="view_cntrl_btn_2.png")
+        self.b2image = tk.PhotoImage(file="view_recording.png")
         self.b3image = tk.PhotoImage(file="mouse_button.png")
         self.b1 = tk.Button(self.tk,text='Record inputs',command=self.record,image=self.b1image,borderwidth=2,bg='#ff008c',activebackground='#00b2ff')
         self.b2 = tk.Button(self.tk,text='View Controls',command=self.controls, image = self.b2image,borderwidth=2,bg='#ff008c',activebackground='#00b2ff')
@@ -40,11 +42,11 @@ class appTest():
         self.top = tk.Toplevel(self.tk,bg='black')
         self.top.title('key_tracker')
         self.top.geometry("300x500")
-        if self.mouse_listener.running:
+        if self.mouse_listener.running: #redundant code, fix later
             self.mouse_listener.stop()
         if not self.key_listener.running:
+            self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
             self.key_listener.start()
-
 
     def controls(self):
         self.top = tk.Toplevel(self.tk,bg='black')
@@ -60,30 +62,27 @@ class appTest():
         self.top.geometry("100x100")
         self.TpLbl = tk.Label(self.top, bg='#ff008c', fg='#00b2ff', bd=5, borderwidth=3, relief='groove',font=24)
         self.TpLbl.pack()
-        self.TpLbl.place(relx=.1, rely=.2)
-        if self.key_listener.running:
+        self.TpLbl.place(relx=.1, rely=.1)
+        if self.key_listener.running: #redundant code, fix later
             self.key_listener.stop()
         if not self.mouse_listener.running:
+            self.mouse_listener = mouse.Listener(on_move=self.on_move,on_click=self.on_click)
             self.mouse_listener.start()
+            print('new_mouse_list_started')
 
 
     def on_close(self):
         self.file.flush()
-        try:
-            self.top.destroy()
-        except:
-            self.tk.destroy()
+        self.tk.destroy()
 
     def on_press(self, key):
         if key == keyboard.Key.esc:
             print('esc_press')
             if self.key_listener.running:
                 self.key_listener.stop()
-                print('key_list_stop')
-                return False
-            elif self.mouse_listener.running:
-                print('mouse_list_stop')
                 self.mouse_listener.stop()
+                print('Listeners_killed')
+                self.file.flush()
                 return False
             else:
                 print('LOGIC_ERROR')
@@ -114,7 +113,7 @@ class appTest():
     def on_move(self,x,y):
         self.mouse_x_y = (x,y)
         self.TpLbl.config(text=self.mouse_x_y)
-        self.top.geometry("+%s+%s" % (x,y))
+        self.top.wm_geometry("+%s+%s" % (x,y))
         self.TpLbl.update()
 
     def on_click(self,x,y,button,pressed):
