@@ -1,14 +1,11 @@
-'g'
-'h'
-'g'
-'h'
-'g'
-'h'
-'g'
-'g'
-'h'
-'g'
-'h'
-'h'
-'g'
-'g'
+'a'
+'d'
+'d'
+'a'
+8)
+Button.left (548, 508)
+Button.left (569, 406)
+Button.left (569, 406)
+Button.left (559, 331)
+Button.left (559, 331)
+Button.left (643, 184)

@@ -1,12 +1,11 @@
 import tkinter as tk
-from math import floor
-
+from tkinter import messagebox as mb
 import pynput as pn
 from pynput import keyboard, mouse
 
 class appTest():
     def __init__(self):
-        self.file = open('MACRO_INP.txt','w')
+        self.file = None
         self.mouse_x_y = (None,None)
         self.tk = tk.Tk()
         self.tk.config(bg='black')
@@ -25,9 +24,17 @@ class appTest():
         self.top = None
         self.TpLbl = None
         self.y = -30
+        self.x = 10
         self.trccol = 0
         self.scroll = None
+        self.btn = None
+        self.text = None
+        self.inp1 = None
+        self.inp2 = None
+        self.inp3 = None
         self.tk.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.m_player = pn.mouse.Controller()
+        self.k_player = pn.keyboard.Controller()
 
     def baseBuild(self):
         self.b1.pack()
@@ -39,41 +46,74 @@ class appTest():
         self.tk.mainloop()
 
     def record(self):
-        self.top = tk.Toplevel(self.tk,bg='black')
-        self.top.title('key_tracker')
-        self.top.geometry("300x500")
-        if self.mouse_listener.running: #redundant code, fix later
-            self.mouse_listener.stop()
-        if not self.key_listener.running:
-            self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
-            self.key_listener.start()
+        self.file = open('MACRO_INP.txt', 'w')
+        if self.mouse_listener.running or self.key_listener.running: #redundant code, fix later
+            mb.showwarning(title='[NO]',message='One at a time, please.')
+        else:
+            self.x = 10
+            self.y = -30
+            self.top = tk.Toplevel(self.tk,bg='black')
+            self.top.protocol("WM_DELETE_WINDOW", self.on_close_key)
+            self.top.title('key_tracker')
+            self.top.geometry("300x500")
+            if not self.key_listener.running:
+                self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
+                self.key_listener.start()
+                print('new_key_list_started')
 
     def controls(self):
-        self.top = tk.Toplevel(self.tk,bg='black')
-        self.top.title('controls_view')
-        self.top.geometry("300x500")
+        if self.mouse_listener.running or self.key_listener.running:
+            mb.showwarning(title='[SUPER_NO]',message='Please stay on the recording tab.')
+        else:
+            self.top = tk.Toplevel(self.tk,bg='black')
+            self.top.title('controls_view')
+            self.top.geometry("300x500")
+            self.text = tk.Text(self.top,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',height=25,width=33)
+            self.text.pack()
+            self.text.place(relx=.05,rely=.05)
+            self.file = open('MACRO_INP.txt','r')
+            self.text.insert('0.0',str(self.file.read()))
+            self.btn = tk.Button(self.top,bg='#ff008c',fg='#00b2ff', bd=5,borderwidth=3,relief='groove',text='Confirm inputs?', command=self.play)
+            self.btn.pack()
+            self.btn.place(relx=.35,rely=.9)
 
     def mouse(self):
-        self.top = tk.Toplevel(self.tk,bg='black')
-        self.top.title('mouse_tracker')
-        self.top.overrideredirect(True)
-        self.top.wm_attributes("-transparentcolor", "black")
-        self.top.attributes("-topmost",True)
-        self.top.geometry("100x100")
-        self.TpLbl = tk.Label(self.top, bg='#ff008c', fg='#00b2ff', bd=5, borderwidth=3, relief='groove',font=24)
-        self.TpLbl.pack()
-        self.TpLbl.place(relx=.1, rely=.1)
-        if self.key_listener.running: #redundant code, fix later
-            self.key_listener.stop()
-        if not self.mouse_listener.running:
-            self.mouse_listener = mouse.Listener(on_move=self.on_move,on_click=self.on_click)
-            self.mouse_listener.start()
-            print('new_mouse_list_started')
-
+        self.file = open('MACRO_INP.txt', 'w')
+        if self.key_listener.running:
+            mb.showwarning(title='[NO]',message='One at a time, please.')
+        elif self.mouse_listener.running:
+            mb.showwarning(title='[OOPS]',message='Please close the mouse recording by closing the original window.')
+        else:
+            self.top = tk.Toplevel(self.tk,bg='black')
+            self.top.title('mouse_tracker')
+            self.top.overrideredirect(True)
+            self.top.wm_attributes("-transparentcolor", "black")
+            self.top.attributes("-topmost",True)
+            self.top.geometry("100x100")
+            self.TpLbl = tk.Label(self.top, bg='#ff008c', fg='#00b2ff', bd=5, borderwidth=3, relief='groove',font=24)
+            self.TpLbl.pack()
+            self.TpLbl.place(relx=.1, rely=.1)
+            if self.key_listener.running: #redundant code, fix later
+                self.key_listener.stop()
+            if not self.mouse_listener.running:
+                self.mouse_listener = mouse.Listener(on_move=self.on_move,on_click=self.on_click)
+                self.mouse_listener.start()
+                print('new_mouse_list_started')
 
     def on_close(self):
-        self.file.flush()
-        self.tk.destroy()
+        if self.mouse_listener.running:
+            self.mouse_listener.stop()
+            self.top.destroy()
+        else:
+            self.file.flush()
+            self.tk.destroy()
+
+    def on_close_key(self):
+        if self.key_listener.running:
+            mb.showwarning(title='WARNING',message="Please press [ESC] before you close this window to end this recording.")
+        else:
+            self.file.flush()
+            self.top.destroy()
 
     def on_press(self, key):
         if key == keyboard.Key.esc:
@@ -95,15 +135,14 @@ class appTest():
         self.trccol += 1
         self.y += 30
         if self.y >= self.tk.winfo_height():
-            self.scroll = tk.Scrollbar(self.top)
-            self.scroll.pack()
-            self.scroll.place(relx=.9,rely=.4)
+            self.y = 0
+            self.x += 30
         if self.trccol % 2 == 0:
             self.TpLbl = tk.Label(self.top, bg='#ff008c',fg='#00b2ff', bd=5,borderwidth=3,relief='groove')
         else:
             self.TpLbl = tk.Label(self.top, bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove')
         self.TpLbl.pack()
-        self.TpLbl.place(x=10, y=self.y)
+        self.TpLbl.place(x=self.x, y=self.y)
         self.TpLbl.config(text=self.key)
         self.TpLbl.update()
         print('inputs held : ' + str(self.inp_ct), self.key)
@@ -124,7 +163,16 @@ class appTest():
             pass
 
     def play(self):
-        pass
+        self.tk.destroy()
+        self.tk = tk.Tk()
+        self.tk.configure(bg='black')
+        self.tk.geometry("300x500")
+        self.TpLbl = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',height=25,width=38)
+        self.TpLbl.pack()
+        self.TpLbl.place(relx=.05,rely=.05)
+        self.inp1 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff')
+        self.inp1.pack()
+        self.inp1.place(relx=.3,rely=.2)
 
 test = appTest()
 test.baseBuild()
