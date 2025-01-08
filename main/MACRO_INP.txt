@@ -1,2 +1,11 @@
-Button.left (468, 340)
-Button.left (468, 340)
+'a'
+'d'
+'d'
+'a'
+8)
+Button.left (548, 508)
+Button.left (569, 406)
+Button.left (569, 406)
+Button.left (559, 331)
+Button.left (559, 331)
+Button.left (643, 184)
