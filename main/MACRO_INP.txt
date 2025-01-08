@@ -1,14 +1,2 @@
-'g'
-'h'
-'g'
-'h'
-'g'
-'h'
-'g'
-'g'
-'h'
-'g'
-'h'
-'h'
-'g'
-'g'
+Button.left (468, 340)
+Button.left (468, 340)
