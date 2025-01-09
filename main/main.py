@@ -74,16 +74,15 @@ class appTest():
         self.temp = self.file.readlines()
         print(self.temp)
         for x in self.temp:
-
-            listy = ['tab','enter','shift','l_alt','alt','r_alt']
-            """
-            if x in listy:
-                self.k_player.tap(getattr(pn.keyboard,listy[x]))
-                print('should tab')"""
+            outerFlag = False
+            listy = ['tab','enter','shift','l_alt','alt','r_alt','space']
             for i in range(0,len(x)):
                 if listy[i] in x:
                     self.k_player.tap(getattr(pn.keyboard.Key,listy[i]))
+                    outerFlag = True
                     break
+            if outerFlag:
+                continue
             for n in x:
                 if n in "abcdefghijklmnopqrstuv":
                     self.k_player.type(n)

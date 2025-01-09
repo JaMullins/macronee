@@ -1,0 +1,17 @@
+Key.shift
+'V'
+'i'
+'n'
+'c'
+'e'
+'n'
+'t'
+'s'
+Key.space
+'a'
+Key.space
+'b'
+'i'
+'t'
+'c'
+'h'
