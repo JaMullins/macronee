@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from tkinter import messagebox as mb, StringVar
 import pynput as pn
@@ -72,8 +73,12 @@ class appTest():
         self.k_player.press(pn.keyboard.Key.backspace)
         self.file = open('MACRO_INP.txt','r')
         self.temp = self.file.read()
-        print(self.temp())
-
+        print(self.temp)
+        for x in self.temp:
+            for n in x:
+                print(n)
+                if n in "abcdefghijklmnopqrstuv":
+                    self.k_player.type(n)
     def record(self):
         self.file = open('MACRO_INP.txt', 'w')
         if self.mouse_listener.running or self.key_listener.running: #redundant code, fix later
