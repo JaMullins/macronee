@@ -64,7 +64,7 @@
  [],
  False,
  False,
- 1736440583,
+ 1736442986,
  [('run.exe',
    'C:\\Users\\jackmullins\\PycharmProjects\\macronee\\.venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
    'EXECUTABLE')],
