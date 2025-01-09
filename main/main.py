@@ -1,5 +1,4 @@
 import tkinter as tk
-from pstats import Stats
 from tkinter import messagebox as mb, StringVar
 import pynput as pn
 from pynput import keyboard, mouse
@@ -68,8 +67,8 @@ class appTest():
         self.tk.mainloop()
 
     def on_activate(self,key):
-        self.k_player.release(str(self.defaultVal.get()).lower())
-        print(str(self.defaultVal.get()).lower())
+        LocalKey = str(self.defaultVal.get()).lower()
+        self.k_player.release(getattr(pn.keyboard.Key,LocalKey))
         self.k_player.press(pn.keyboard.Key.backspace)
         self.file = open('MACRO_INP.txt','r')
         self.temp = self.file.read()
@@ -224,8 +223,7 @@ class appTest():
         hotkey = keyboard.HotKey(keyboard.HotKey.parse(self.HotKeyList.lower()),on_activate=lambda: self.on_activate(self.HotKeyList))
         self.tk.destroy()
         self.key_listener = pn.keyboard.Listener(on_press=self.for_canonical(hotkey.press),on_release=self.for_canonical(hotkey.release))
-        self.key_listener.start()
-        self.key_listener.join()
+        self.key_listener.run()
         print('should print')
 
 test = appTest()
