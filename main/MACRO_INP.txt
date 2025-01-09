@@ -1,11 +1,12 @@
-'a'
-'d'
-'d'
-'a'
-8)
-Button.left (548, 508)
-Button.left (569, 406)
-Button.left (569, 406)
-Button.left (559, 331)
-Button.left (559, 331)
-Button.left (643, 184)
+Button.left (1259, 457)
+Button.left (1259, 457)
+Button.left (534, 641)
+Button.left (534, 641)
+Button.left (515, 399)
+Button.left (515, 399)
+Button.left (1009, 490)
+Button.left (1009, 490)
+Button.left (898, 1189)
+Button.left (898, 1189)
+Button.left (998, 183)
+'s'

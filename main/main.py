@@ -5,7 +5,7 @@ from pynput import keyboard, mouse
 
 class appTest():
     def __init__(self):
-        self.file = None
+        self.file = open('MACRO_INP.txt',"w")
         self.mouse_x_y = (None,None)
         self.tk = tk.Tk()
         self.tk.config(bg='black')
@@ -35,6 +35,7 @@ class appTest():
         self.tk.protocol("WM_DELETE_WINDOW", self.on_close)
         self.m_player = pn.mouse.Controller()
         self.k_player = pn.keyboard.Controller()
+        self.lbl2 = None
 
     def baseBuild(self):
         self.b1.pack()
@@ -163,16 +164,21 @@ class appTest():
             pass
 
     def play(self):
+        self.file = open('MACRO_INP.txt','w')
+        self.file.write(self.text.get("0.0","end-1c"))
+        self.file.close()
         self.tk.destroy()
         self.tk = tk.Tk()
         self.tk.configure(bg='black')
-        self.tk.geometry("300x500")
-        self.TpLbl = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',height=25,width=38)
-        self.TpLbl.pack()
-        self.TpLbl.place(relx=.05,rely=.05)
-        self.inp1 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff')
-        self.inp1.pack()
-        self.inp1.place(relx=.3,rely=.2)
+        self.tk.title("[HotKey_Set_v2.0001]")
+        self.TpLbl = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='First HotKey:',font=18)
+        self.TpLbl.grid(row = 0, column = 0,pady=5,padx=2)
+        self.inp1 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
+        self.inp1.grid(row=0,column=1,pady=2,padx=2)
+        self.lbl2 = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='Second HotKey:',font=18)
+        self.lbl2.grid(row=1,column=0,pady=5,padx=2)
+        self.inp2 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
+        self.inp2.grid(row=1,column=1,pady=2,padx=2)
 
 test = appTest()
 test.baseBuild()
