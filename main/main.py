@@ -13,7 +13,12 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
+
+
 class appTest():
+    def for_canonical(self,hotkey):
+        return lambda k: hotkey(self.key_listener.canonical(k))
+
     def __init__(self):
         self.file = open('MACRO_INP.txt',"w")
         self.mouse_x_y = (None,None)
@@ -63,7 +68,9 @@ class appTest():
         self.tk.mainloop()
 
     def on_activate(self):
-        pass
+        self.file = open('MACRO_INP.txt','r')
+        self.temp = self.file.readlines(-1)
+        print(self.temp)
 
     def record(self):
         self.file = open('MACRO_INP.txt', 'w')
@@ -196,12 +203,12 @@ class appTest():
         self.defaultVal2.set("[CLICK_ME!]")
         self.TpLbl = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='First HotKey:',font=18)
         self.TpLbl.grid(row = 0, column = 0,pady=5,padx=2)
-        self.drpDwn = tk.OptionMenu(self.tk,self.defaultVal,"CTRL","ALT","TAB","TILDA","FN","WIN")
+        self.drpDwn = tk.OptionMenu(self.tk,self.defaultVal,"CTRL","ALT","TAB","FN","WIN")
         self.drpDwn.configure(bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
         self.drpDwn.grid(row=0,column=1,pady=2,padx=2)
         self.lbl2 = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='Second HotKey:',font=18)
         self.lbl2.grid(row=1,column=0,pady=5,padx=2)
-        self.drpDwn2 = tk.OptionMenu(self.tk, self.defaultVal2, "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","TILDA_AGAIN")
+        self.drpDwn2 = tk.OptionMenu(self.tk, self.defaultVal2, "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
         self.drpDwn2.configure(bg='#ff008c', fg='#00b2ff', borderwidth=5, relief="groove")
         self.drpDwn2.grid(row=1, column=1, pady=2, padx=2)
         self.btn = tk.Button(self.tk,bg='#00b2ff',fg='#ff008c',borderwidth=5,relief="groove",text="Confirm HotKey settings?",command=self.final_setup)
@@ -212,7 +219,12 @@ class appTest():
         self.HotKeyList = self.HotKeyList + str(self.defaultVal2.get())
         print(self.HotKeyList)
         self.temp = self.HotKeyList
-        self.HotKeyList = keyboard.HotKey(keyboard.HotKey.parse(self.temp),on_activate=self.on_activate)
+        self.HotKeyList = keyboard.HotKey(keyboard.HotKey.parse(self.temp.lower()),on_activate=self.on_activate)
+        self.tk.destroy()
+        self.key_listener = pn.keyboard.Listener(on_press=self.for_canonical(self.HotKeyList.press),on_release=self.for_canonical(self.HotKeyList.release))
+        self.key_listener.start()
+        self.key_listener.join()
+        print('should print')
 
 test = appTest()
 test.baseBuild()
