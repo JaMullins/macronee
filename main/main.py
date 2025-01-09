@@ -51,6 +51,7 @@ class appTest():
         self.defaultVal = None
         self.defaultVal2 = None
         self.HotKeyList = None
+        self.temp = None
 
     def baseBuild(self):
         self.b1.pack()
@@ -60,6 +61,9 @@ class appTest():
         self.b3.pack()
         self.b3.place(relx=.5, rely=.75, anchor='center')
         self.tk.mainloop()
+
+    def on_activate(self):
+        pass
 
     def record(self):
         self.file = open('MACRO_INP.txt', 'w')
@@ -186,7 +190,6 @@ class appTest():
         self.tk = tk.Tk()
         self.tk.configure(bg='black')
         self.tk.title("[HotKey_Set_v2.0001]")
-        #Only here because I accidentally clicked commit instead of commit and push
         self.defaultVal = StringVar(self.tk)
         self.defaultVal.set("[CLICK_ME!]")
         self.defaultVal2 = StringVar(self.tk)
@@ -196,20 +199,20 @@ class appTest():
         self.drpDwn = tk.OptionMenu(self.tk,self.defaultVal,"CTRL","ALT","TAB","TILDA","FN","WIN")
         self.drpDwn.configure(bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
         self.drpDwn.grid(row=0,column=1,pady=2,padx=2)
-        """
-        self.inp1 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
-        self.inp1.grid(row=0,column=1,pady=2,padx=2)
-        """
         self.lbl2 = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='Second HotKey:',font=18)
         self.lbl2.grid(row=1,column=0,pady=5,padx=2)
-
         self.drpDwn2 = tk.OptionMenu(self.tk, self.defaultVal2, "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","TILDA_AGAIN")
         self.drpDwn2.configure(bg='#ff008c', fg='#00b2ff', borderwidth=5, relief="groove")
         self.drpDwn2.grid(row=1, column=1, pady=2, padx=2)
-        """
-        self.inp2 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
-        self.inp2.grid(row=1,column=1,pady=2,padx=2)
-        """
+        self.btn = tk.Button(self.tk,bg='#00b2ff',fg='#ff008c',borderwidth=5,relief="groove",text="Confirm HotKey settings?",command=self.final_setup)
+        self.btn.grid(row=2,column=0,padx=10,pady=10)
+
+    def final_setup(self):
+        self.HotKeyList = '<' + str(self.defaultVal.get()) + '>+'
+        self.HotKeyList = self.HotKeyList + str(self.defaultVal2.get())
+        print(self.HotKeyList)
+        self.temp = self.HotKeyList
+        self.HotKeyList = keyboard.HotKey(keyboard.HotKey.parse(self.temp),on_activate=self.on_activate)
 
 test = appTest()
 test.baseBuild()
