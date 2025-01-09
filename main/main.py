@@ -67,10 +67,13 @@ class appTest():
         self.b3.place(relx=.5, rely=.75, anchor='center')
         self.tk.mainloop()
 
-    def on_activate(self):
+    def on_activate(self,key):
+        self.k_player.release(str(self.defaultVal.get()).lower())
+        print(str(self.defaultVal.get()).lower())
+        self.k_player.press(pn.keyboard.Key.backspace)
         self.file = open('MACRO_INP.txt','r')
-        self.temp = self.file.readlines(-1)
-        print(self.temp)
+        self.temp = self.file.read()
+        print(self.temp())
 
     def record(self):
         self.file = open('MACRO_INP.txt', 'w')
@@ -217,11 +220,10 @@ class appTest():
     def final_setup(self):
         self.HotKeyList = '<' + str(self.defaultVal.get()) + '>+'
         self.HotKeyList = self.HotKeyList + str(self.defaultVal2.get())
-        print(self.HotKeyList)
         self.temp = self.HotKeyList
-        self.HotKeyList = keyboard.HotKey(keyboard.HotKey.parse(self.temp.lower()),on_activate=self.on_activate)
+        hotkey = keyboard.HotKey(keyboard.HotKey.parse(self.HotKeyList.lower()),on_activate=lambda: self.on_activate(self.HotKeyList))
         self.tk.destroy()
-        self.key_listener = pn.keyboard.Listener(on_press=self.for_canonical(self.HotKeyList.press),on_release=self.for_canonical(self.HotKeyList.release))
+        self.key_listener = pn.keyboard.Listener(on_press=self.for_canonical(hotkey.press),on_release=self.for_canonical(hotkey.release))
         self.key_listener.start()
         self.key_listener.join()
         print('should print')
