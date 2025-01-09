@@ -1,7 +1,17 @@
 import tkinter as tk
-from tkinter import messagebox as mb
+from pstats import Stats
+from tkinter import messagebox as mb, StringVar
 import pynput as pn
 from pynput import keyboard, mouse
+import os, sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class appTest():
     def __init__(self):
@@ -11,9 +21,9 @@ class appTest():
         self.tk.config(bg='black')
         self.tk.geometry("500x500")
         self.tk.title('MACROni')
-        self.b1image = tk.PhotoImage(file="record_button_2.png")
-        self.b2image = tk.PhotoImage(file="view_recording.png")
-        self.b3image = tk.PhotoImage(file="mouse_button.png")
+        self.b1image = tk.PhotoImage(file=resource_path("record_button_2.png"))
+        self.b2image = tk.PhotoImage(file=resource_path("view_recording.png"))
+        self.b3image = tk.PhotoImage(file=resource_path("mouse_button.png"))
         self.b1 = tk.Button(self.tk,text='Record inputs',command=self.record,image=self.b1image,borderwidth=2,bg='#ff008c',activebackground='#00b2ff')
         self.b2 = tk.Button(self.tk,text='View Controls',command=self.controls, image = self.b2image,borderwidth=2,bg='#ff008c',activebackground='#00b2ff')
         self.b3 = tk.Button(self.tk,text='Record mouse inputs', command=self.mouse,image = self.b3image, borderwidth=2, bg='#ff008c',activebackground='#00b2ff')
@@ -36,6 +46,11 @@ class appTest():
         self.m_player = pn.mouse.Controller()
         self.k_player = pn.keyboard.Controller()
         self.lbl2 = None
+        self.drpDwn = None
+        self.drpDwn2 = None
+        self.defaultVal = None
+        self.defaultVal2 = None
+        self.HotKeyList = None
 
     def baseBuild(self):
         self.b1.pack()
@@ -172,14 +187,29 @@ class appTest():
         self.tk.configure(bg='black')
         self.tk.title("[HotKey_Set_v2.0001]")
         #Only here because I accidentally clicked commit instead of commit and push
+        self.defaultVal = StringVar(self.tk)
+        self.defaultVal.set("[CLICK_ME!]")
+        self.defaultVal2 = StringVar(self.tk)
+        self.defaultVal2.set("[CLICK_ME!]")
         self.TpLbl = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='First HotKey:',font=18)
         self.TpLbl.grid(row = 0, column = 0,pady=5,padx=2)
+        self.drpDwn = tk.OptionMenu(self.tk,self.defaultVal,"CTRL","ALT","TAB","TILDA","FN","WIN")
+        self.drpDwn.configure(bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
+        self.drpDwn.grid(row=0,column=1,pady=2,padx=2)
+        """
         self.inp1 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
         self.inp1.grid(row=0,column=1,pady=2,padx=2)
+        """
         self.lbl2 = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='Second HotKey:',font=18)
         self.lbl2.grid(row=1,column=0,pady=5,padx=2)
+
+        self.drpDwn2 = tk.OptionMenu(self.tk, self.defaultVal2, "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","TILDA_AGAIN")
+        self.drpDwn2.configure(bg='#ff008c', fg='#00b2ff', borderwidth=5, relief="groove")
+        self.drpDwn2.grid(row=1, column=1, pady=2, padx=2)
+        """
         self.inp2 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
         self.inp2.grid(row=1,column=1,pady=2,padx=2)
+        """
 
 test = appTest()
 test.baseBuild()
