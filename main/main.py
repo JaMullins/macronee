@@ -171,6 +171,7 @@ class appTest():
         self.tk = tk.Tk()
         self.tk.configure(bg='black')
         self.tk.title("[HotKey_Set_v2.0001]")
+        #Only here because I accidentally clicked commit instead of commit and push
         self.TpLbl = tk.Label(self.tk,bg='#00b2ff',fg='#ff008c', bd=5,borderwidth=3,relief='groove',text='First HotKey:',font=18)
         self.TpLbl.grid(row = 0, column = 0,pady=5,padx=2)
         self.inp1 = tk.Entry(self.tk,bg='#ff008c',fg='#00b2ff',borderwidth=5,relief="groove")
